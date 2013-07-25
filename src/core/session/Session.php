@@ -8,13 +8,13 @@ interface Session
     
     function destroy();
     
-    function isActive();
+//     function isActive();
     
-    function getStatusId();
+//     function getStatusId();
     
     function getId();
     
-    function regenerateId();
+//     function regenerateId();
     
 //     function setTimeout();
     

@@ -6,17 +6,31 @@ class UserSession implements Session
 {
     public function __construct()
     {
-        session_start();
-        $this->onExpireDestroyAndRedirect();
-        $this->updateLastActivity();
+    	session_start();
+        $this->setFingerprint();
+        $this->checkStatus();
     }
     
-    private function onExpireDestroyAndRedirect()
+    private function setFingerprint()
     {
-        if ($this->isExpired())
+        if (!isset($_SESSION['fingerprint']))
+        {
+            $_SESSION['fingerprint'] = $this->getFingerprint();
+        }
+    }
+    
+    private function getFingerprint()
+    {
+    	return hash('sha512', $_SERVER['HTTP_USER_AGENT']);
+    }
+    
+    private function checkStatus()
+    {
+        if ($this->isExpired() || !$this->isValid())
         {
             $this->destroyAndRedirect();
         }
+        $this->updateLastActivity();
     }
     
     private function isExpired()
@@ -28,14 +42,19 @@ class UserSession implements Session
         }
     }
     
+    private function isValid()
+    {
+    	return isset($_SESSION['fingerprint']) && $_SESSION['fingerprint'] == $this->getFingerprint();
+    }
+    
     public function destroyAndRedirect()
     {
         $this->destroy();
-        header('Location: ' . SESSION_EXPIRED_LOCATION);
+        header('Location: ' . SESSION_END_REDIRECT_LOCATION);
         exit();
     }
     
-    public function updateLastActivity()
+    private function updateLastActivity()
     {
     	$_SESSION['LAST_ACTIVITY'] = time();
     }
@@ -69,10 +88,10 @@ class UserSession implements Session
         return session_status() === PHP_SESSION_ACTIVE;
     }
     
-    public function getStatusId()
-    {
-        return session_status();
-    }
+//     public function getStatusId()
+//     {
+//         return session_status();
+//     }
     
     public function getId()
     {
