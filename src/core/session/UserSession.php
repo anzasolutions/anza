@@ -6,22 +6,35 @@ class UserSession implements Session
 {
     public function __construct()
     {
+        $this->initialize();
+    }
+    
+    private function initialize()
+    {
     	session_start();
         $this->setFingerprint();
-        $this->checkStatus();
+        if ($this->isStarted())
+        {
+            $this->checkStatus();
+        }
     }
     
     private function setFingerprint()
     {
-        if (!isset($_SESSION['fingerprint']))
+        if (!isset($_SESSION['FINGERPRINT']))
         {
-            $_SESSION['fingerprint'] = $this->getFingerprint();
+            $_SESSION['FINGERPRINT'] = $this->getFingerprint();
         }
     }
     
     private function getFingerprint()
     {
     	return hash('sha512', $_SERVER['HTTP_USER_AGENT']);
+    }
+    
+    public function isStarted()
+    {
+    	return isset($_SESSION['STARTED']) && $_SESSION['STARTED'];
     }
     
     private function checkStatus()
@@ -44,7 +57,7 @@ class UserSession implements Session
     
     private function isValid()
     {
-    	return isset($_SESSION['fingerprint']) && $_SESSION['fingerprint'] == $this->getFingerprint();
+    	return isset($_SESSION['FINGERPRINT']) && $_SESSION['FINGERPRINT'] == $this->getFingerprint();
     }
     
     public function destroyAndRedirect()
@@ -83,16 +96,6 @@ class UserSession implements Session
         session_destroy();
     }
     
-    public function isActive()
-    {
-        return session_status() === PHP_SESSION_ACTIVE;
-    }
-    
-//     public function getStatusId()
-//     {
-//         return session_status();
-//     }
-    
     public function getId()
     {
         return session_id();
@@ -123,6 +126,12 @@ class UserSession implements Session
     public function __isset($key)
     {
         return isset($_SESSION[$key]);
+    }
+    
+    public function start()
+    {
+        $this->regenerateId();
+    	$_SESSION['STARTED'] = true;
     }
 }
 
