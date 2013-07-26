@@ -29,7 +29,7 @@ class UserSession implements Session
     
     private function getFingerprint()
     {
-    	return hash('sha512', $_SERVER['HTTP_USER_AGENT']);
+    	return hash('sha512', SESSION_SALT . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
     }
     
     public function isStarted()

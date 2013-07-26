@@ -7,7 +7,8 @@ spl_autoload_register();
 
 define('SESSION_END_REDIRECT_LOCATION', '/anza');
 define('SESSION_DURATION_LIMIT', 1800);
-define('DEBUG', false);
+define('SESSION_SALT', 'ABC');
+define('DEBUG', true);
 
 $session = new UserSession();
 
