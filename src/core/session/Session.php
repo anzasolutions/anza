@@ -10,7 +10,7 @@ interface Session
     
     function getId();
     
-//     function regenerateId();
+    function regenerateId();
     
 }
 

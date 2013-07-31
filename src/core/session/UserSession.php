@@ -17,6 +17,10 @@ class UserSession implements Session
         {
             $this->checkStatus();
         }
+//         else
+//         {
+//             $this->regenerateId();
+//         }
     }
     
     private function setFingerprint()
@@ -27,39 +31,62 @@ class UserSession implements Session
         }
     }
     
+    /**
+     * Unique identifier of a client combined of:
+     * - the user agent being which is accessing the page
+     * - the IP address from which the user is viewing the current page
+     * - extra salt string
+     * @return string hashed unique client identifier
+     */
     private function getFingerprint()
     {
     	return hash('sha512', SESSION_SALT . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
     }
     
+    /**
+     * Checks whether $_SESSION contains
+     * marker of truely started session.
+     * @return boolean true when session started marker is set
+     */
     public function isStarted()
     {
     	return isset($_SESSION['STARTED']) && $_SESSION['STARTED'];
     }
     
+    /**
+     * Monitors started session and execute one of actions:
+     * - destroy session and redirect to the expired session
+     *   location when the session fingerprint is incorrect
+     * - update timeout of the current session
+     */
     private function checkStatus()
     {
-        if ($this->isExpired() || !$this->isValid())
+        if (/* $this->isExpired() ||  */!$this->isFingerprintValid())
         {
             $this->destroyAndRedirect();
         }
-        $this->updateLastActivity();
+//         $this->updateLastActivity();
+        $this->updateTimeout();
     }
     
-    private function isExpired()
-    {
-        if (isset($_SESSION['LAST_ACTIVITY']))
-        {
-            $duration = time() - $_SESSION['LAST_ACTIVITY'];
-            return $duration > SESSION_DURATION_LIMIT;
-        }
-    }
+//     private function isExpired()
+//     {
+//         if (isset($_SESSION['LAST_ACTIVITY']))
+//         {
+//             $duration = time() - $_SESSION['LAST_ACTIVITY'];
+//             return $duration > SESSION_DURATION_LIMIT;
+//         }
+//     }
     
-    private function isValid()
+    private function isFingerprintValid()
     {
     	return isset($_SESSION['FINGERPRINT']) && $_SESSION['FINGERPRINT'] == $this->getFingerprint();
     }
     
+    /**
+     * Destroys started session and
+     * redirects to the expired session location.
+     */
     public function destroyAndRedirect()
     {
         $this->destroy();
@@ -67,9 +94,18 @@ class UserSession implements Session
         exit();
     }
     
-    private function updateLastActivity()
+//     private function updateLastActivity()
+//     {
+//     	$_SESSION['LAST_ACTIVITY'] = time();
+//     }
+    
+    private function updateTimeout()
     {
-    	$_SESSION['LAST_ACTIVITY'] = time();
+        // saves cookie for a given period of time
+        if (isset($_COOKIE[session_name()]))
+        {
+            setcookie(session_name(), $_COOKIE[session_name()], time() + SESSION_DURATION_LIMIT, '/');
+        }
     }
     
     /**
@@ -113,6 +149,23 @@ class UserSession implements Session
         return session_regenerate_id(true);
     }
     
+    /**
+     * Starts truely session with:
+     * - new session id
+     * - updated session timeout
+     * - the session started marker
+     */
+    public function start()
+    {
+        $this->regenerateId();
+    	
+    	$_COOKIE[session_name()] = session_id();
+    	
+        $this->updateTimeout();
+        
+    	$_SESSION['STARTED'] = true;
+    }
+    
     public function __get($key)
     {
         return $_SESSION[$key];
@@ -126,12 +179,6 @@ class UserSession implements Session
     public function __isset($key)
     {
         return isset($_SESSION[$key]);
-    }
-    
-    public function start()
-    {
-        $this->regenerateId();
-    	$_SESSION['STARTED'] = true;
     }
 }
 
