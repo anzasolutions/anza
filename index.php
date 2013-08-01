@@ -20,7 +20,7 @@ if ($get->login == 'andy')
 {
     if ($get->remember)
     {
-        $session->extend();
+        $session->setExtended();
     }
     $session->start();
     header('Location: ' . SESSION_END_REDIRECT_LOCATION);

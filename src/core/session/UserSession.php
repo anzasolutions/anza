@@ -2,6 +2,23 @@
 
 namespace core\session;
 
+/**
+ * Handles user session and keeps track of session data.
+ * 
+ * Expires when:
+ * - not extended session cookie is set:
+ *   + after a normal expiration limit
+ *   + on browser shutdown
+ * - extended session cookie is set
+ *   + after an extended expiration limit 
+ * - explicit session destruction by user
+ * 
+ * Is protected from hijack attempts by regeneration of session id
+ * and client recognition using a fingerprint id.
+ * 
+ * @author anza
+ *
+ */
 class UserSession implements Session
 {
     public function __construct()
@@ -117,13 +134,12 @@ class UserSession implements Session
     
     private function updateTimeout()
     {
-        // saves cookie for a given period of time
         if (isset($_COOKIE[session_name()]))
         {
             if ($this->isExtended())
             {
                 $expire = time() + SESSION_DURATION_LIMIT_EXTENDED;
-                $this->extend();
+                $this->setExtended();
             }
             else
             {
@@ -141,7 +157,8 @@ class UserSession implements Session
     
     /**
      * Destroys all data registered to a session altogether with
-     * a session cookie used to propagate the session id (default behavior).
+     * a session cookies used to propagate the session id (default behavior).
+     * Extended session cookie is destroyed as well.
      *
      * @link http://www.php.net/manual/en/function.session-destroy.php
      * @return bool Returns true on success or false on failure.
@@ -164,6 +181,9 @@ class UserSession implements Session
         session_destroy();
     }
     
+    /**
+     * @deprecated
+     */
     public function getId()
     {
         return session_id();
@@ -182,7 +202,7 @@ class UserSession implements Session
     }
     
     /**
-     * Starts truely session with:
+     * Starts user session with:
      * - new session id
      * - updated session timeout
      * - the session started marker
@@ -195,10 +215,13 @@ class UserSession implements Session
     
     private function updateCookieStatus()
     {
+        // session id regeration for security reasons
         $this->regenerateId();
         
+        // new session id is assigned to the existing session cookie 
         $_COOKIE[session_name()] = session_id();
         
+        // session expiration timeout is updated
         $this->updateTimeout();
     }
     
@@ -215,7 +238,7 @@ class UserSession implements Session
         $_SESSION[$key] = $value;
     }
     
-    public function extend()
+    public function setExtended()
     {
         setcookie('extended', true, time() + SESSION_DURATION_LIMIT_EXTENDED);
     }
