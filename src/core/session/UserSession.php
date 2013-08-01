@@ -17,10 +17,10 @@ class UserSession implements Session
         {
             $this->checkStatus();
         }
-//         else
-//         {
-//             $this->regenerateId();
-//         }
+        else // is this really necessary?
+        {
+            $this->regenerateId();
+        }
     }
     
     private function setFingerprint()
@@ -65,8 +65,15 @@ class UserSession implements Session
         {
             $this->destroyAndRedirect();
         }
-//         $this->updateLastActivity();
-        $this->updateTimeout();
+        
+//         if ($this->extended)
+//         {
+            $this->updateTimeout();
+//         }
+//         else
+//         {
+//             $this->updateLastActivity();
+//         }
     }
     
 //     private function isExpired()
@@ -104,7 +111,16 @@ class UserSession implements Session
         // saves cookie for a given period of time
         if (isset($_COOKIE[session_name()]))
         {
-            setcookie(session_name(), $_COOKIE[session_name()], time() + SESSION_DURATION_LIMIT, '/');
+            if ($this->isExtended())
+            {
+                $expire = time() + SESSION_DURATION_LIMIT_EXTENDED;
+                $this->setExtended(true);
+            }
+            else
+            {
+                $expire = 0;
+            }
+            setcookie(session_name(), $_COOKIE[session_name()], $expire, '/');
         }
     }
     
@@ -126,6 +142,7 @@ class UserSession implements Session
         {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+            setcookie('extended', null, -1);
         }
         
         // Finally, destroy the session.
@@ -157,13 +174,17 @@ class UserSession implements Session
      */
     public function start()
     {
-        $this->regenerateId();
+        $this->updateCookieStatus();
+    	$_SESSION['STARTED'] = true;
+    }
+    
+    private function updateCookieStatus()
+    {
+    	$this->regenerateId();
     	
     	$_COOKIE[session_name()] = session_id();
     	
         $this->updateTimeout();
-        
-    	$_SESSION['STARTED'] = true;
     }
     
     public function __get($key)
@@ -179,6 +200,16 @@ class UserSession implements Session
     public function __isset($key)
     {
         return isset($_SESSION[$key]);
+    }
+    
+    public function isExtended()
+    {
+    	return isset($_COOKIE['extended']) && $_COOKIE['extended'];
+    }
+    
+    public function setExtended($extended)
+    {
+    	setcookie('extended', $extended, time() + SESSION_DURATION_LIMIT_EXTENDED);
     }
 }
 
