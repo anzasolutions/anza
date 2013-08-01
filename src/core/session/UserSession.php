@@ -37,9 +37,9 @@ class UserSession implements Session
     
     private function setFingerprint()
     {
-        if (! isset($_SESSION['FINGERPRINT']))
+        if (! isset($_SESSION['fingerprint']))
         {
-            $_SESSION['FINGERPRINT'] = $this->getFingerprint();
+            $_SESSION['fingerprint'] = $this->getFingerprint();
         }
     }
     
@@ -64,7 +64,7 @@ class UserSession implements Session
      */
     public function isStarted()
     {
-        return isset($_SESSION['STARTED']) && $_SESSION['STARTED'];
+        return isset($_SESSION['started']) && $_SESSION['started'];
     }
     
     /**
@@ -86,17 +86,22 @@ class UserSession implements Session
     {
         if (! $this->isExtended())
         {
-            if (isset($_SESSION['LAST_ACTIVITY']))
+            if (isset($_SESSION['last_activity']))
             {
-                $duration = time() - $_SESSION['LAST_ACTIVITY'];
+                $duration = time() - $_SESSION['last_activity'];
                 return $duration > SESSION_DURATION_LIMIT;
             }
         }
     }
     
+    private function isExtended()
+    {
+        return isset($_COOKIE['extended']) && $_COOKIE['extended'];
+    }
+    
     private function isFingerprintValid()
     {
-        return isset($_SESSION['FINGERPRINT']) && $_SESSION['FINGERPRINT'] == $this->getFingerprint();
+        return isset($_SESSION['fingerprint']) && $_SESSION['fingerprint'] == $this->getFingerprint();
     }
     
     /**
@@ -131,7 +136,7 @@ class UserSession implements Session
     
     private function updateLastActivity()
     {
-        $_SESSION['LAST_ACTIVITY'] = time();
+        $_SESSION['last_activity'] = time();
     }
     
     /**
@@ -185,7 +190,7 @@ class UserSession implements Session
     public function start()
     {
         $this->updateCookieStatus();
-        $_SESSION['STARTED'] = true;
+        $_SESSION['started'] = true;
     }
     
     private function updateCookieStatus()
@@ -208,11 +213,6 @@ class UserSession implements Session
     public function __set($key, $value)
     {
         $_SESSION[$key] = $value;
-    }
-    
-    public function isExtended()
-    {
-        return isset($_COOKIE['extended']) && $_COOKIE['extended'];
     }
     
     public function extend()
