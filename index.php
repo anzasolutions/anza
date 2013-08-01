@@ -1,24 +1,25 @@
 <?php
 
 use core\session\UserSession;
+use core\storage\Get;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'src');
 spl_autoload_register();
 
 define('SESSION_END_REDIRECT_LOCATION', '/anza');
-// define('SESSION_DURATION_LIMIT', 60 * 60 * 24 * 15);
 define('SESSION_DURATION_LIMIT', 20);
 define('SESSION_DURATION_LIMIT_EXTENDED', 60 * 60 * 24 * 15);
 define('SESSION_SALT', 'ABC');
 define('DEBUG', true);
 
+$get = new Get();
 $session = new UserSession();
 
-if (isset($_GET['login']) && $_GET['login'] == 'andy')
+if ($get->login == 'andy')
 {
-    if (isset($_GET['remember']) && $_GET['remember'] == 'on')
+    if ($get->remember)
     {
-        $session->setExtended(true);
+        $session->extend();
     }
     $session->start();
     header('Location: ' . SESSION_END_REDIRECT_LOCATION);
@@ -43,13 +44,13 @@ else
 
 ?>
 
-<a href="?session=destroy">destroy</a>
+<a href="?session=off">destroy</a>
 
 <?php
 
 }
 
-if (isset($_GET['session']) && $_GET['session'] == 'destroy')
+if ($get->session == 'off')
 {
     $session->destroyAndRedirect();
 }
