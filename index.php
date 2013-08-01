@@ -7,9 +7,10 @@ set_include_path(get_include_path() . PATH_SEPARATOR . 'src');
 spl_autoload_register();
 
 define('SESSION_END_REDIRECT_LOCATION', '/anza');
-define('SESSION_DURATION_LIMIT', 20);
+define('SESSION_DURATION_LIMIT', 60 * 60);
 define('SESSION_DURATION_LIMIT_EXTENDED', 60 * 60 * 24 * 15);
 define('SESSION_SALT', 'ABC');
+
 define('DEBUG', true);
 
 $get = new Get();
