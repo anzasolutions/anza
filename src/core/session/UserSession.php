@@ -199,17 +199,15 @@ class UserSession implements Session
     
     public function __get($key)
     {
-        return $_SESSION[$key];
+        if (isset($_SESSION[$key]))
+        {
+            return $_SESSION[$key];
+        }
     }
     
     public function __set($key, $value)
     {
         $_SESSION[$key] = $value;
-    }
-    
-    public function __isset($key)
-    {
-        return isset($_SESSION[$key]);
     }
     
     public function isExtended()
