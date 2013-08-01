@@ -6,13 +6,25 @@ class UserSession implements Session
 {
     public function __construct()
     {
+        // specific method is kept here only for clarity in
+        // constructor and info about purpose of the initialize() body
         $this->initialize();
     }
     
     private function initialize()
     {
+        // session must start / resume in order to do anything
         session_start();
+        
+        // create unique fingerprint of the session client
+        // used later for checking whether the currently
+        // accessing session user comes from the same source
         $this->setFingerprint();
+        
+        // quite apparent, but might be confusing as this is not
+        // exactly starting session, but only a marker that 
+        // a user is logged in and therefore in fact an experiencing
+        // session activities are allowed
         if ($this->isStarted())
         {
             $this->checkStatus();
@@ -58,7 +70,7 @@ class UserSession implements Session
     /**
      * Monitors started session and execute one of actions:
      * - destroy session and redirect to the expired session
-     * location when the session fingerprint is incorrect
+     *   location when the session fingerprint is incorrect
      * - update timeout of the current session
      */
     private function checkStatus()
