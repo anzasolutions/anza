@@ -2,14 +2,11 @@
 
 namespace core\storage;
 
-class Get
+class Get extends Box
 {
-	public function __get($key)
+	public function __construct()
 	{
-		if (isset($_GET[$key]))
-		{
-		    return $_GET[$key];
-		}
+	    parent::__construct($_GET);
 	}
 }
 

@@ -2,14 +2,11 @@
 
 namespace core\storage;
 
-class Post
+class Post extends Box
 {
-	public function __get($key)
+	public function __construct()
 	{
-		if (isset($_POST[$key]))
-		{
-		    return $_POST[$key];
-		}
+	    parent::__construct($_POST);
 	}
 }
 
