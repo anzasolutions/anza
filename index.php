@@ -2,6 +2,8 @@
 
 use core\session\UserSession;
 use core\storage\Get;
+use core\container\Container;
+use core\container\ClasspathFinder;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'src');
 spl_autoload_register();
@@ -13,8 +15,17 @@ define('SESSION_SALT', 'ABC');
 
 define('DEBUG', true);
 
+define('APPLICATION_ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/anza/src');
+
 $get = new Get();
 $session = new UserSession();
+
+$c = new Container();
+
+// Box::get($session, 'name');
+
+// Box::get()->session->name;
+// Box::get($session)->name;
 
 if ($get->login == 'andy')
 {
@@ -61,7 +72,7 @@ if (DEBUG)
     echo $session->getId();
     
     print_r($_SESSION);
-    // print_r($_SERVER);
+        // print_r($_SERVER);
     print_r($_COOKIE);
 }
 
