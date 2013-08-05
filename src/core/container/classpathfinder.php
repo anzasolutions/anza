@@ -29,7 +29,7 @@ class ClasspathFinder
     {
         if (isset($this->paths[strtolower($classname)]))
         {
-            return $this->paths[$class];
+            return $this->paths[strtolower($classname)];
         }
     }
 }
