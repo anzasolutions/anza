@@ -27,6 +27,7 @@ class ClasspathFinder
     
     public function find($classname)
     {
+        $classname = strtolower($classname);
         if (isset($this->paths[$classname]))
         {
             return $this->paths[$classname];
