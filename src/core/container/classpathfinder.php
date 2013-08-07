@@ -4,7 +4,7 @@ namespace core\container;
 
 class ClasspathFinder
 {
-    private $paths = array();
+    private $paths;
     
     public function __construct()
     {
@@ -18,7 +18,7 @@ class ClasspathFinder
         {
             if (!$it->isDot())
             {
-                $classname = substr(strrchr($it->getSubPathName(), DIRECTORY_SEPARATOR), 1, -4);
+                $classname = strtolower(substr(strrchr($it->getSubPathName(), DIRECTORY_SEPARATOR), 1, -4));
                 $this->paths[$classname] = $it->getSubPath();
             }
             $it->next();
@@ -27,9 +27,9 @@ class ClasspathFinder
     
     public function find($classname)
     {
-        if (isset($this->paths[strtolower($classname)]))
+        if (isset($this->paths[$classname]))
         {
-            return $this->paths[strtolower($classname)];
+            return $this->paths[$classname];
         }
     }
 }
