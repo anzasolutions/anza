@@ -23,6 +23,7 @@ class Container
         $this->classpathFinder = new ClasspathFinder();
     }
     
+    // or rather get() ?
     public static function create($classname)
     {
         try
