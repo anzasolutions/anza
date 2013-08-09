@@ -4,60 +4,49 @@ namespace core\container;
 
 class Container
 {
-    private static $instance;
+    private $objects;
+    private $singletons;
     
-    private $objects = array();
-    private $classpathFinder;
-    
-    public static function getInstance()
+    public function __construct()
     {
-        if (self::$instance == null)
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
+        $this->initialize();
     }
     
-    private function __construct()
+    private function initialize()
     {
-        $this->classpathFinder = new ClasspathFinder();
-    }
-    
-    // or rather get() ?
-    public static function create($classname)
-    {
-        try
+        $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(APPLICATION_ROOT_PATH));
+        foreach ($it as $path)
         {
-            class_exists($classname);
-            $bindKey = strtolower(substr(strrchr($classname, '\\'), 1));
-        }
-        catch (\LogicException $e)
-        {
-            $container = self::getInstance();
-            $namespace = $container->classpathFinder->find($classname);
-            if (empty($namespace))
+            if (!$it->isDot())
             {
-                throw new CreateException();
+                $namespace = $it->getSubPath();
+                $classname = $path->getBasename('.php');
+                $this->objects[$classname] = function ($singleton = false) use ($namespace, $classname)
+                {
+                    $class = $namespace . '\\' . $classname;
+                    return new $class();
+                };
             }
-            $classname = $namespace . '\\' . $classname;
-            $bindKey = $classname;
         }
-        
-        $object = new $classname();
-        $container->objects[$bindKey] = $object;
-        return $object;
     }
     
-    public static function get($classname, $singleton = false)
+    public function get($classname, $singleton = false)
     {
         $classname = strtolower($classname);
-        $container = self::getInstance();
-        return $container->classpathFinder->get($classname, $singleton);
-//     	if (isset($container->objects[$classname]))
-//     	{
-//     	    return $container->objects[$classname]();
-//     	}
-    	throw new NoInstanceInContainerException();
+        
+        if ($singleton)
+        {
+            if (isset($this->singletons[$classname]))
+            {
+                return $this->singletons[$classname];
+            }
+            return $this->singletons[$classname] = $this->objects[$classname]($singleton);
+        }
+        
+        if (isset($this->objects[$classname]))
+        {
+            return $this->objects[$classname]();
+        }
     }
 }
 
