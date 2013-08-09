@@ -24,21 +24,21 @@ $session = new UserSession();
 // try
 // {
 
-class Controller
-{
-    private $accountService;
+// class Controller
+// {
+//     private $accountService;
 
-    public function setAccountService(Get $service)
-    {
-        $this->accountService = $service;
-    }
+//     public function setAccountService(Get $service)
+//     {
+//         $this->accountService = $service;
+//     }
     
-    public function setAccountService2(Get $service)
-    {
-    	$this->accountService = $service;
-    }
+//     public function setAccountService2(Get $service)
+//     {
+//     	$this->accountService = $service;
+//     }
 
-}
+// }
 
 // $c = new Controller();
 // $ro = new \ReflectionClass($c);
@@ -52,13 +52,22 @@ class Controller
 
 //     Container::create('Post');
 //     Container::create('core\storage\Box');
-    $ggg = Container::get('Get', true);
-    $ggg = Container::get('Get', true);
-    $ggg = Container::get('Get', true);
+
+    $container = new Container();
+    $container->get('Get', true);
+    $container->get('Get', true);
+    $container->get('Get', true);
     
     echo Get::$count;
     
-    Container::get('post');
+    $container->get('post');
+//     $ggg = Container::get('Get', true);
+//     $ggg = Container::get('Get', true);
+//     $ggg = Container::get('Get', true);
+    
+//     echo Get::$count;
+    
+//     Container::get('post');
     
 //     $ggg->lep = 'pep';
 //     echo $ggg->lep;
