@@ -23,9 +23,54 @@ $session = new UserSession();
 
 // try
 // {
-    Container::create('Post');
-    Container::create('core\storage\Box');
-//     Container::get('Get');
+
+class Controller
+{
+    private $accountService;
+
+    public function setAccountService(Get $service)
+    {
+        $this->accountService = $service;
+    }
+    
+    public function setAccountService2(Get $service)
+    {
+    	$this->accountService = $service;
+    }
+
+}
+
+// $c = new Controller();
+// $ro = new \ReflectionClass($c);
+// $m = $ro->getMethods();
+// $p = $m[0]->getParameters();
+// echo $p[0]->getClass()->name;
+// $p2 = $m[1]->getParameters();
+// echo $p2[0]->getClass()->name;
+// print_r($p);
+// $c->setAccountService();
+
+//     Container::create('Post');
+//     Container::create('core\storage\Box');
+    $ggg = Container::get('Get', true);
+    $ggg = Container::get('Get', true);
+    $ggg = Container::get('Get', true);
+    
+    echo Get::$count;
+    
+    Container::get('post');
+    
+//     $ggg->lep = 'pep';
+//     echo $ggg->lep;
+
+//     Container::getInstance()->get;
+//     $container = new Container();
+//     $container->get;
+
+//     $container = Container::getInstance();
+//     $container->service->account;
+//     $container->dao->user;
+    
 // }
 // catch (CreateException $e)
 // {

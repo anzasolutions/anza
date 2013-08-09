@@ -48,13 +48,15 @@ class Container
         return $object;
     }
     
-    public static function get($classname)
+    public static function get($classname, $singleton = false)
     {
+        $classname = strtolower($classname);
         $container = self::getInstance();
-    	if (isset($container->objects[$classname]))
-    	{
-    	    return $container->objects[$classname];
-    	}
+        return $container->classpathFinder->get($classname, $singleton);
+//     	if (isset($container->objects[$classname]))
+//     	{
+//     	    return $container->objects[$classname]();
+//     	}
     	throw new NoInstanceInContainerException();
     }
 }
