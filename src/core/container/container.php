@@ -21,7 +21,7 @@ class Container
             {
                 $namespace = $it->getSubPath();
                 $classname = $path->getBasename('.php');
-                $this->objects[$classname] = function ($singleton = false) use ($namespace, $classname)
+                $this->objects[$classname] = function () use ($namespace, $classname)
                 {
                     $class = $namespace . '\\' . $classname;
                     return new $class();
@@ -30,23 +30,44 @@ class Container
         }
     }
     
-    public function get($classname, $singleton = false)
+//     public function get($classname, $singleton = false)
+//     {
+//         $classname = strtolower($classname);
+        
+//         if ($singleton)
+//         {
+//             if (isset($this->singletons[$classname]))
+//             {
+//                 return $this->singletons[$classname];
+//             }
+//             return $this->singletons[$classname] = $this->objects[$classname]($singleton);
+//         }
+        
+//         if (isset($this->objects[$classname]))
+//         {
+//             return $this->objects[$classname]();
+//         }
+//     }
+    
+    public function create($classname)
     {
         $classname = strtolower($classname);
-        
-        if ($singleton)
-        {
-            if (isset($this->singletons[$classname]))
-            {
-                return $this->singletons[$classname];
-            }
-            return $this->singletons[$classname] = $this->objects[$classname]($singleton);
-        }
         
         if (isset($this->objects[$classname]))
         {
             return $this->objects[$classname]();
         }
+    }
+    
+    public function singleton($classname)
+    {
+        $classname = strtolower($classname);
+        
+        if (isset($this->singletons[$classname]))
+        {
+            return $this->singletons[$classname];
+        }
+        return $this->singletons[$classname] = $this->objects[$classname]();
     }
 }
 
