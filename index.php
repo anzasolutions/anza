@@ -5,6 +5,7 @@ use core\storage\Get;
 use core\container\Container;
 use core\container\ClasspathFinder;
 use core\container\CreateException;
+use core\storage\Post;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'src');
 spl_autoload_register();
@@ -56,13 +57,19 @@ $session = new UserSession();
     $container = new Container();
     $container->singleton('Get');
     $container->singleton('Get');
-    $get2 = $container->singleton('Get');
-//     echo $get2->getClass();
+    $container->singleton('Get');
     
     
     echo Get::$count;
 
     $container->create('post');
+    
+    $container->bind('post2', function ()
+    {
+        return new Post();
+    });
+    
+    $container->create('post2');
     $container->create('dupa');
 
 //     $container = new Container();

@@ -50,6 +50,11 @@ class Container
         }
         return $this->singletons[$classname] = $this->objects[$classname]();
     }
+    
+    public function bind($key, $closure)
+    {
+        $this->objects[$key] = $closure;
+    }
 }
 
 ?>
