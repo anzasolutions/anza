@@ -30,25 +30,6 @@ class Container
         }
     }
     
-//     public function get($classname, $singleton = false)
-//     {
-//         $classname = strtolower($classname);
-        
-//         if ($singleton)
-//         {
-//             if (isset($this->singletons[$classname]))
-//             {
-//                 return $this->singletons[$classname];
-//             }
-//             return $this->singletons[$classname] = $this->objects[$classname]($singleton);
-//         }
-        
-//         if (isset($this->objects[$classname]))
-//         {
-//             return $this->objects[$classname]();
-//         }
-//     }
-    
     public function create($classname)
     {
         $classname = strtolower($classname);

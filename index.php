@@ -54,13 +54,26 @@ $session = new UserSession();
 //     Container::create('core\storage\Box');
 
     $container = new Container();
-    $container->get('Get', true);
-    $container->get('Get', true);
-    $container->get('Get', true);
+    $container->singleton('Get');
+    $container->singleton('Get');
+    $get2 = $container->singleton('Get');
+//     echo $get2->getClass();
+    
     
     echo Get::$count;
+
+    $container->create('post');
+    $container->create('dupa');
+
+//     $container = new Container();
+//     $container->get('Get', true);
+//     $container->get('Get', true);
+//     $container->get('Get', true);
     
-    $container->get('post');
+//     echo Get::$count;
+    
+//     $container->get('post');
+
 //     $ggg = Container::get('Get', true);
 //     $ggg = Container::get('Get', true);
 //     $ggg = Container::get('Get', true);
