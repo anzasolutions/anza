@@ -30,25 +30,21 @@ class Container
         }
     }
     
-    public function create($classname)
+    public function create($key)
     {
-        $classname = strtolower($classname);
-        
-        if (isset($this->objects[$classname]))
+        if (isset($this->objects[$key]))
         {
-            return $this->objects[$classname]();
+            return $this->objects[$key]();
         }
     }
     
-    public function singleton($classname)
+    public function singleton($key)
     {
-        $classname = strtolower($classname);
-        
-        if (isset($this->singletons[$classname]))
+        if (isset($this->singletons[$key]))
         {
-            return $this->singletons[$classname];
+            return $this->singletons[$key];
         }
-        return $this->singletons[$classname] = $this->objects[$classname]();
+        return $this->singletons[$key] = $this->objects[$key]();
     }
     
     public function bind($key, $closure)

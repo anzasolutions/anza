@@ -55,9 +55,9 @@ $session = new UserSession();
 //     Container::create('core\storage\Box');
 
     $container = new Container();
-    $container->singleton('Get');
-    $container->singleton('Get');
-    $container->singleton('Get');
+    $container->singleton('get');
+    $container->singleton('get');
+    $container->singleton('get');
     
     
     echo Get::$count;
