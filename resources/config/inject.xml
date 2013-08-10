@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<inject>
+	<class name="controller">
+		<field name="box" class="get" interface="box" singleton="true" />
+		<field name="box2" class="dupa" interface="box" />
+	</class>
+	<class name="controller2">
+		<field name="box2" class="get" />
+	</class>
+</inject>

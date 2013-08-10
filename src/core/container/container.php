@@ -6,10 +6,12 @@ class Container
 {
     private $objects;
     private $singletons;
+    private $injections;
     
     public function __construct()
     {
         $this->initialize();
+        $this->injections = simplexml_load_file(INJECT_FILE);
     }
     
     private function initialize()
@@ -34,7 +36,23 @@ class Container
     {
         if (isset($this->objects[$key]))
         {
-            return $this->objects[$key]();
+            $object = $this->objects[$key]();
+            $reflection = new \ReflectionObject($object);
+            
+            foreach ($this->injections as $class)
+            {
+                if ($class['name'] == $key)
+                {
+                    foreach ($class->field as $field)
+                    {
+                        $dependency = $this->create((string) $field['class']);
+                        $property = $reflection->getProperty($field['name']);
+                        $property->setAccessible(true);
+                        $property->setValue($object, $dependency);
+                    }
+                }
+            }
+            return $object;
         }
     }
     
