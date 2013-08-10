@@ -25,8 +25,8 @@ class Container
                 $namespace = $it->getSubPath();
                 $classname = $path->getBasename('.php');
                 $class = $namespace . '\\' . $classname;
-                $this->classes[$classname] = $class; 
-                $this->objects[$classname] = function () use ($class)
+                $this->classes[$classname] = $class;
+                $this->objects[$classname] = function () use($class)
                 {
                     return new $class();
                 };
@@ -39,39 +39,7 @@ class Container
         if (isset($this->objects[$key]))
         {
             $object = $this->objects[$key]();
-            $reflection = new \ReflectionObject($object);
-            
-            foreach ($this->injections as $class)
-            {
-                if ($class['name'] == $key)
-                {
-                    foreach ($class->field as $field)
-                    {
-                        if ((string) $field['singleton'] == 'true')
-                        {
-                            $dependency = $this->singleton((string) $field['type']);
-                        }
-                        else
-                        {
-                            $dependency = $this->create((string) $field['type']);
-                        }
-                        
-                        $property = $reflection->getProperty($field['name']);
-                        
-                        if (!empty($field['supertype']))
-                        {
-                            $super = $this->classes[(string) $field['supertype']];
-                            if (!($dependency instanceof $super))
-                            {
-                                throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
-                            }
-                        }
-                        $property->setAccessible(true);
-                        $property->setValue($object, $dependency);
-                    }
-                }
-            }
-            return $object;
+            return $this->inject($key, $object);
         }
     }
     
@@ -81,7 +49,46 @@ class Container
         {
             return $this->singletons[$key];
         }
-        return $this->singletons[$key] = $this->objects[$key]();
+        $object = $this->objects[$key]();
+        return $this->singletons[$key] = $this->inject($key, $object);
+    }
+    
+    public function inject($key, $object)
+    {
+        $object = $this->objects[$key]();
+        $reflection = new \ReflectionObject($object);
+        
+        foreach ($this->injections as $class)
+        {
+            if ($class['name'] == $key)
+            {
+                foreach ($class->field as $field)
+                {
+                    if ((string) $field['singleton'] == 'true')
+                    {
+                        $dependency = $this->singleton((string) $field['type']);
+                    }
+                    else
+                    {
+                        $dependency = $this->create((string) $field['type']);
+                    }
+                    
+                    $property = $reflection->getProperty($field['name']);
+                    
+                    if (!empty($field['supertype']))
+                    {
+                        $super = $this->classes[(string) $field['supertype']];
+                        if (!($dependency instanceof $super))
+                        {
+                            throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
+                        }
+                    }
+                    $property->setAccessible(true);
+                    $property->setValue($object, $dependency);
+                }
+            }
+        }
+        return $object;
     }
     
     public function bind($key, $closure)

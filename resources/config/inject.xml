@@ -2,6 +2,10 @@
 
 <inject>
 	<class name="controller">
+		<field name="box" type="get" supertype="box" />
+		<field name="box2" type="andycontroller" supertype="controller" singleton="true" />
+	</class>
+	<class name="andycontroller">
 		<field name="box" type="get" supertype="box" singleton="true" />
 		<field name="box2" type="post" supertype="box" />
 	</class>
