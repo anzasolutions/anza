@@ -53,12 +53,11 @@ $session = new UserSession();
 //     Container::create('core\storage\Box');
 
     $container = new Container();
-//     $container->singleton('get');
+    $container->singleton('get');
 //     $container->singleton('get');
 //     $container->singleton('get');
     
     
-//     echo Get::$count;
 
     $container->create('post');
     
@@ -72,6 +71,8 @@ $session = new UserSession();
     
     $controller = $container->create('controller');
     print_r($controller);
+
+    echo Get::$count;
 //     $box = $controller->getBox();
 //     print_r($box);
 

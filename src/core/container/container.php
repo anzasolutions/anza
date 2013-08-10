@@ -4,6 +4,7 @@ namespace core\container;
 
 class Container
 {
+    private $classes;
     private $objects;
     private $singletons;
     private $injections;
@@ -23,9 +24,10 @@ class Container
             {
                 $namespace = $it->getSubPath();
                 $classname = $path->getBasename('.php');
-                $this->objects[$classname] = function () use ($namespace, $classname)
+                $class = $namespace . '\\' . $classname;
+                $this->classes[$classname] = $class; 
+                $this->objects[$classname] = function () use ($class)
                 {
-                    $class = $namespace . '\\' . $classname;
                     return new $class();
                 };
             }
@@ -45,8 +47,25 @@ class Container
                 {
                     foreach ($class->field as $field)
                     {
-                        $dependency = $this->create((string) $field['class']);
+                        if ((string) $field['singleton'] == 'true')
+                        {
+                            $dependency = $this->singleton((string) $field['type']);
+                        }
+                        else
+                        {
+                            $dependency = $this->create((string) $field['type']);
+                        }
+                        
                         $property = $reflection->getProperty($field['name']);
+                        
+                        if (!empty($field['supertype']))
+                        {
+                            $super = $this->classes[(string) $field['supertype']];
+                            if (!($dependency instanceof $super))
+                            {
+                                throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
+                            }
+                        }
                         $property->setAccessible(true);
                         $property->setValue($object, $dependency);
                     }

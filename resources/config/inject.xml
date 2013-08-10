@@ -2,10 +2,10 @@
 
 <inject>
 	<class name="controller">
-		<field name="box" class="get" interface="box" singleton="true" />
-		<field name="box2" class="dupa" interface="box" />
+		<field name="box" type="get" supertype="box" singleton="true" />
+		<field name="box2" type="post" supertype="box" />
 	</class>
 	<class name="controller2">
-		<field name="box2" class="get" />
+		<field name="box2" type="get" />
 	</class>
 </inject>
