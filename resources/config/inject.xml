@@ -4,6 +4,7 @@
 	<class name="controller">
 		<field name="box" type="get" supertype="box" />
 		<field name="box2" type="andycontroller" supertype="controller" singleton="true" />
+		<field name="box3" type="get" />
 	</class>
 	<class name="andycontroller">
 		<field name="box" type="get" supertype="box" singleton="true" />

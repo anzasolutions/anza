@@ -65,16 +65,23 @@ class Container
                 $method = (string) $field['singleton'] == 'true' ? 'singleton' : 'create';
                 $dependency = $this->{$method}((string) $field['type']);
                 
-                if (isset($field['supertype']))
+                if ($reflection->hasMethod($setter = 'set'.$property->name))
                 {
-                    $super = $this->classes[(string) $field['supertype']];
-                    if (!($dependency instanceof $super))
-                    {
-                        throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
-                    }
+                    $object->$setter($dependency);
                 }
-                $property->setAccessible(true);
-                $property->setValue($object, $dependency);
+                else
+                {
+                    if (isset($field['supertype']))
+                    {
+                        $super = $this->classes[(string) $field['supertype']];
+                        if (!($dependency instanceof $super))
+                        {
+                            throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
+                        }
+                    }
+                    $property->setAccessible(true);
+                    $property->setValue($object, $dependency);
+                }
             }
         }
         return $object;
