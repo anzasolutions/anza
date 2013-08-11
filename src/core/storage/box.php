@@ -2,15 +2,13 @@
 
 namespace core\storage;
 
-// alternative name
-// class Silo
 class Box
 {
     private $content;
     
     public function __construct(array $content = array())
     {
-    	$this->content = $content;
+        $this->content = $content;
     }
     
     public function __get($key)
