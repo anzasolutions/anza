@@ -87,6 +87,12 @@ class Container
         return $object;
     }
     
+    /**
+     * Explicitly binds class to a key in the Container
+     * for later creation as a normal instance or a singleton 
+     * @param unknown $key a reference to the registered container class
+     * @param unknown $closure code to be executed on invocation
+     */
     public function bind($key, $closure)
     {
         $this->objects[$key] = $closure;
