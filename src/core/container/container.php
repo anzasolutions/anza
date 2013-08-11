@@ -55,37 +55,26 @@ class Container
     
     public function inject($key, $object)
     {
-        $object = $this->objects[$key]();
         $reflection = new \ReflectionObject($object);
-        
-        foreach ($this->injections as $class)
+        $properties = $reflection->getProperties();
+        foreach ($properties as $property)
         {
-            if ($class['name'] == $key)
+            $fields = $this->injections->xpath('//class[@name = "' . $key . '"]/field[@name = "'. $property->name . '"]');
+            foreach ($fields as $field)
             {
-                foreach ($class->field as $field)
+                $method = (string) $field['singleton'] == 'true' ? 'singleton' : 'create';
+                $dependency = $this->{$method}((string) $field['type']);
+                
+                if (isset($field['supertype']))
                 {
-                    if ((string) $field['singleton'] == 'true')
+                    $super = $this->classes[(string) $field['supertype']];
+                    if (!($dependency instanceof $super))
                     {
-                        $dependency = $this->singleton((string) $field['type']);
+                        throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
                     }
-                    else
-                    {
-                        $dependency = $this->create((string) $field['type']);
-                    }
-                    
-                    $property = $reflection->getProperty($field['name']);
-                    
-                    if (!empty($field['supertype']))
-                    {
-                        $super = $this->classes[(string) $field['supertype']];
-                        if (!($dependency instanceof $super))
-                        {
-                            throw new IncorrectInjectionSupertypeException("{$field['type']} is not an instance of $super");
-                        }
-                    }
-                    $property->setAccessible(true);
-                    $property->setValue($object, $dependency);
                 }
+                $property->setAccessible(true);
+                $property->setValue($object, $dependency);
             }
         }
         return $object;
