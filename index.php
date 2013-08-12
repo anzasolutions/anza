@@ -7,6 +7,7 @@ use core\container\ClasspathFinder;
 use core\container\CreateException;
 use core\storage\Post;
 use core\storage\Controller;
+use core\storage\Server;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'src');
 spl_autoload_register();
@@ -23,94 +24,30 @@ define('DEBUG', true);
 
 define('INJECT_FILE', INSTALLATION_ROOT_PATH . '/resources/config/inject.xml');
 
-$get = new Get();
-$session = new UserSession();
+$container = new Container();
+$get = $container->singleton('get');
+$session = $container->singleton('usersession');
 
-// try
-// {
+$container->create('post');
 
-// $c = new Controller();
-// $ro = new \ReflectionClass($c);
-// $methods = $ro->getMethods();
-// foreach ($methods as $method)
-// {
-//     $parameters = $method->getParameters();
-//     foreach ($parameters as $parameter)
-//     {
-//         $parameter->getClass()->name;
-//     }
-// }
+$container->bind('post2', function ()
+{
+    return new Post();
+});
 
-// $p = $m[0]->getParameters();
-// echo $p[0]->getClass()->name;
+$container->create('post2');
+$container->create('get');
 
-// $p2 = $m[1]->getParameters();
-// echo $p2[0]->getClass()->name;
-// print_r($p);
-// $c->setAccountService();
+$controller = $container->create('controller');
 
-//     Container::create('Post');
-//     Container::create('core\storage\Box');
+print_r($controller);
 
-    $container = new Container();
-    $container->singleton('get');
-//     $container->singleton('get');
-//     $container->singleton('get');
-    
-    
-
-    $container->create('post');
-    
-    $container->bind('post2', function ()
-    {
-        return new Post();
-    });
-    
-    $container->create('post2');
-//     $container->create('dupa');
-    
-    $controller = $container->create('controller');
-    print_r($controller);
-
-    echo Get::$count;
-//     $box = $controller->getBox();
-//     print_r($box);
-
-//     $container = new Container();
-//     $container->get('Get', true);
-//     $container->get('Get', true);
-//     $container->get('Get', true);
-    
-//     echo Get::$count;
-    
-//     $container->get('post');
-
-//     $ggg = Container::get('Get', true);
-//     $ggg = Container::get('Get', true);
-//     $ggg = Container::get('Get', true);
-    
-//     echo Get::$count;
-    
-//     Container::get('post');
-    
-//     $ggg->lep = 'pep';
-//     echo $ggg->lep;
-
-//     Container::getInstance()->get;
-//     $container = new Container();
-//     $container->get;
+echo Get::$count;
 
 //     $container = Container::getInstance();
 //     $container->service->account;
 //     $container->dao->user;
     
-// }
-// catch (CreateException $e)
-// {
-//     echo $e;
-    // log
-// }
-
 // Box::get($session, 'name');
 
 // Box::get()->session->name;
@@ -163,5 +100,7 @@ if (DEBUG)
 //     print_r($_SERVER);
     print_r($_COOKIE);
 }
+
+echo $container->singleton('server')->HTTP_USER_AGENT;
 
 ?>
