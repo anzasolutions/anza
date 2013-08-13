@@ -21,6 +21,11 @@ class Container
         $this->injections = simplexml_load_file(INJECT_FILE);
     }
     
+    /**
+     * Recursively walks through a project structure.
+     * Based on the paths and class files found creates
+     * registry of classes to be used for instantiation.
+     */
     private function initialize()
     {
         $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(APPLICATION_ROOT_PATH));
@@ -40,6 +45,13 @@ class Container
         }
     }
     
+    /**
+     * Creates new instance of a registered class.
+     *
+     * @param string $key a reference to a registered container class
+     * @throws CreateException when impossible to create new object
+     * @return object properly created instance of registered class
+     */
     public function create($key)
     {
         if (isset($this->objects[$key]))
@@ -50,6 +62,12 @@ class Container
         throw new CreateException("Cannot create instance of a class by the given key: $key");
     }
     
+    /**
+     * Provides a single shared instance of a registered class.
+     *
+     * @param string $key a reference to a registered container class
+     * @return object an instance shared across application
+     */
     public function single($key)
     {
         if (isset($this->singles[$key]))
@@ -105,7 +123,7 @@ class Container
     
     /**
      * Explicitly binds class to a key in the Container
-     * for later creation as a normal instance or a singleton.
+     * for later creation as a normal instance or a single.
      *
      * @param string $key a reference to a registered container class
      * @param object $closure code to be executed on invocation
