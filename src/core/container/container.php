@@ -50,8 +50,7 @@ class Container
         {
             return $this->singletons[$key];
         }
-        $object = $this->objects[$key]();
-        return $this->singletons[$key] = $this->inject($key, $object);
+        return $this->singletons[$key] = $this->create($key);
     }
     
     public function inject($key, $object)
