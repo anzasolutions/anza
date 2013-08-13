@@ -25,8 +25,8 @@ define('DEBUG', true);
 define('INJECT_FILE', INSTALLATION_ROOT_PATH . '/resources/config/inject.xml');
 
 $container = new Container();
-$get = $container->singleton('get');
-$session = $container->singleton('usersession');
+$get = $container->single('get');
+$session = $container->single('usersession');
 
 $container->create('post');
 
@@ -39,14 +39,6 @@ $container->create('post2');
 $container->create('get');
 
 $controller = $container->create('controller');
-
-print_r($controller);
-
-echo Get::$count;
-
-//     $container = Container::getInstance();
-//     $container->service->account;
-//     $container->dao->user;
     
 // Box::get($session, 'name');
 
@@ -101,6 +93,6 @@ if (DEBUG)
     print_r($_COOKIE);
 }
 
-echo $container->singleton('server')->HTTP_USER_AGENT;
+echo $container->single('server')->HTTP_USER_AGENT;
 
 ?>

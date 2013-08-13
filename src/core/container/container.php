@@ -5,13 +5,14 @@ namespace core\container;
 /**
  * Contains functionality to create, initialize
  * and provide instances of classes across application.
+ *
  * @author anza
  */
 class Container
 {
     private $classes;
     private $objects;
-    private $singletons;
+    private $singles;
     private $injections;
     
     public function __construct()
@@ -49,20 +50,20 @@ class Container
         throw new CreateException("Cannot create instance of a class by the given key: $key");
     }
     
-    public function singleton($key)
+    public function single($key)
     {
-        if (isset($this->singletons[$key]))
+        if (isset($this->singles[$key]))
         {
-            return $this->singletons[$key];
+            return $this->singles[$key];
         }
-        return $this->singletons[$key] = $this->create($key);
+        return $this->singles[$key] = $this->create($key);
     }
     
     /**
      * Injects shared or new instances of dependency classes
      * to the given object based on reflection and injection
      * configuration.
-     * 
+     *
      * @param string $key a reference to a registered container class
      * @param object $object target of injections
      * @throws IncorrectInjectionSupertypeException
@@ -74,13 +75,13 @@ class Container
         $properties = $reflection->getProperties();
         foreach ($properties as $property)
         {
-            $fields = $this->injections->xpath('//class[@name = "' . $key . '"]/field[@name = "'. $property->name . '"]');
+            $fields = $this->injections->xpath('//class[@name = "' . $key . '"]/field[@name = "' . $property->name . '"]');
             foreach ($fields as $field)
             {
-                $method = (string) $field['singleton'] == 'true' ? 'singleton' : 'create';
+                $method = (string) $field['single'] == 'true' ? 'single' : 'create';
                 $dependency = $this->{$method}((string) $field['type']);
                 
-                if ($reflection->hasMethod($setter = 'set'.$property->name))
+                if ($reflection->hasMethod($setter = 'set' . $property->name))
                 {
                     $object->$setter($dependency);
                 }
@@ -105,7 +106,7 @@ class Container
     /**
      * Explicitly binds class to a key in the Container
      * for later creation as a normal instance or a singleton.
-     * 
+     *
      * @param string $key a reference to a registered container class
      * @param object $closure code to be executed on invocation
      */

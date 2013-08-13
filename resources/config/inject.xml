@@ -3,14 +3,17 @@
 <inject>
 	<class name="controller">
 		<field name="box" type="get" supertype="box" />
-		<field name="box2" type="andycontroller" supertype="controller" singleton="true" />
+		<field name="box2" type="andycontroller" supertype="controller" single="true" />
 		<field name="box3" type="get" />
+		<!-- <field name="cont2" type="controller2" supertype="controller"/> --><!-- watch out! cyclic dependency -->
 	</class>
 	<class name="andycontroller">
-		<field name="box" type="get" supertype="box" singleton="true" />
+		<field name="box" type="get" supertype="box" single="true" />
 		<field name="box2" type="post" supertype="box" />
+		<field name="container" type="container" />
 	</class>
 	<class name="controller2">
 		<field name="box2" type="get" />
+		<field name="cont1" type="controller" />
 	</class>
 </inject>
