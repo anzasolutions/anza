@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <inject>
-	<class name="controller">
-		<field name="box" type="get" supertype="box" />
+	<class name="controller"><!-- additional attribute single="true" can ba added so an instance will be single -->
+		<field name="box" type="get" supertype="box" single="true" />
 		<field name="box2" type="andycontroller" supertype="controller" single="true" />
 		<field name="box3" type="get" />
 		<!-- <field name="cont2" type="controller2" supertype="controller"/> --><!-- watch out! cyclic dependency -->

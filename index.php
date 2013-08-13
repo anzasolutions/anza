@@ -39,11 +39,12 @@ $container->create('post2');
 $container->create('get');
 
 $controller = $container->create('controller');
-    
-// Box::get($session, 'name');
-
-// Box::get()->session->name;
-// Box::get($session)->name;
+$ac = $container->create('andycontroller');
+$cbox = $controller->getBox();
+$cbox->foo = 'bar';
+// print_r($controller);
+// print_r($ac);
+$ac->display();
 
 if ($get->login == 'andy')
 {
