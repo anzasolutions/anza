@@ -2,6 +2,11 @@
 
 namespace core\container;
 
+/**
+ * Contains functionality to create, initialize
+ * and provide instances of classes across application.
+ * @author anza
+ */
 class Container
 {
     private $classes;
