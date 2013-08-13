@@ -53,6 +53,16 @@ class Container
         return $this->singletons[$key] = $this->create($key);
     }
     
+    /**
+     * Injects shared or new instances of dependency classes
+     * to the given object based on reflection and injection
+     * configuration.
+     * 
+     * @param string $key a reference to a registered container class
+     * @param object $object target of injections
+     * @throws IncorrectInjectionSupertypeException
+     * @return object an instance with fields injected
+     */
     public function inject($key, $object)
     {
         $reflection = new \ReflectionObject($object);
@@ -89,9 +99,10 @@ class Container
     
     /**
      * Explicitly binds class to a key in the Container
-     * for later creation as a normal instance or a singleton 
-     * @param unknown $key a reference to the registered container class
-     * @param unknown $closure code to be executed on invocation
+     * for later creation as a normal instance or a singleton.
+     * 
+     * @param string $key a reference to a registered container class
+     * @param object $closure code to be executed on invocation
      */
     public function bind($key, $closure)
     {
