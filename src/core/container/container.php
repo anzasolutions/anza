@@ -41,6 +41,7 @@ class Container
             $object = $this->objects[$key]();
             return $this->inject($key, $object);
         }
+        throw new CreateException("Cannot create instance of a class by the given key: $key");
     }
     
     public function singleton($key)
