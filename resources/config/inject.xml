@@ -15,6 +15,6 @@
 	<class name="controller2">
 		<field name="box2" type="get" />
 		<field name="cont1" type="controller" />
-		<field name="container" type="container" />
+		<field name="container" type="container" /><!-- Container is bound to itself, it's single already -->
 	</class>
 </inject>
