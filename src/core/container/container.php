@@ -18,7 +18,10 @@ class Container
     public function __construct()
     {
         $this->initialize();
-        $this->injections = simplexml_load_file(INJECT_FILE);
+        $this->bind('container', function ()
+        {
+            return $this;
+        });
     }
     
     /**
@@ -43,6 +46,7 @@ class Container
                 };
             }
         }
+        $this->injections = simplexml_load_file(INJECT_FILE);
     }
     
     /**

@@ -10,10 +10,11 @@
 	<class name="andycontroller">
 		<field name="box" type="get" supertype="box" single="true" />
 		<field name="box2" type="post" supertype="box" />
-		<field name="container" type="container" />
+		<field name="container" type="container" single="true" />
 	</class>
 	<class name="controller2">
 		<field name="box2" type="get" />
 		<field name="cont1" type="controller" />
+		<field name="container" type="container" />
 	</class>
 </inject>
