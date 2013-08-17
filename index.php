@@ -1,13 +1,7 @@
 <?php
 
-use core\session\UserSession;
-use core\storage\Get;
 use core\container\Container;
-use core\container\ClasspathFinder;
-use core\container\CreateException;
 use core\storage\Post;
-use core\storage\Controller;
-use core\storage\Server;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'src');
 spl_autoload_register();
