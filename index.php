@@ -17,8 +17,13 @@ define('SESSION_SALT', 'ABC');
 define('DEBUG', true);
 
 define('INJECT_FILE', INSTALLATION_ROOT_PATH . '/resources/config/inject.xml');
+define('ROUTES_FILE', INSTALLATION_ROOT_PATH . '/resources/config/route.xml');
+
+define('NOT_FOUND_PAGE', '/anza/error');
 
 $container = new Container();
+$router = $container->create('router');
+
 $get = $container->single('get');
 $session = $container->single('usersession');
 

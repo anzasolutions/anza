@@ -14,7 +14,7 @@ class AndyController extends Controller
     
     public function display()
     {
-    	echo $this->box->foo;
+//     	echo $this->box->foo;
     }
 }
 

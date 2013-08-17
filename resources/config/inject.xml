@@ -17,4 +17,7 @@
 		<field name="cont1" type="controller" />
 		<field name="container" type="container" /><!-- Container is bound to itself, it's single already -->
 	</class>
+	<class name="router">
+		<field name="container" type="container" />
+	</class>
 </inject>
