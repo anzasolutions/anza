@@ -11,7 +11,6 @@ class Router
 	public function __construct()
 	{
 	    $this->routes = simplexml_load_file(ROUTES_FILE);
-// 	    print_r($this->routes);
 	    $this->dissect();
 	    $this->route();
 	}
@@ -19,7 +18,6 @@ class Router
 	public function dissect()
 	{
 		$this->parts = explode('/', trim($_REQUEST['route'], '/'));
-// 		print_r($this->parts);
 	}
 	
 	public function route()
@@ -32,6 +30,19 @@ class Router
         {
             $xpath .= '/route[@path = "' . $part . '"]';
             $routes = $this->routes->xpath($xpath);
+            
+            if (empty($routes))
+            {
+                $xpath = substr_replace($xpath, '{args}', strrpos($xpath, $part), strlen($part));
+                $routes = $this->routes->xpath($xpath);
+                if (empty($routes))
+                {
+                    $handlerName = 'errorcontroller'; // TODO to be configured
+                    $action = 'error'; // TODO to be configured
+                    break;
+                }
+            }
+            
             foreach ($routes as $route)
             {
                 if (!empty($route['handler']))
@@ -46,13 +57,6 @@ class Router
                 }
             }
             
-            if (empty($routes))
-            {
-//                 header('Location: ' . NOT_FOUND_PAGE);
-                $handlerName = 'errorcontroller';
-                $action = 'error';
-                break;
-            }
         }
         
         echo "$handlerName/$action";

@@ -1,50 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
-	<!-- <route></route>
-	<route path="andy/display/{id}">
-		<class>andycontroller</class>
-		<method>display</method>
-		<args></args>
-	</route>
-	<route path="andy/display">
-		<class>andycontroller</class>
-		<method>display2</method>
-		<args></args>
-	</route>
-	<route path="andy">
-		<class>controller</class>
-		<method>dupa</method>
-		<args></args>
-	</route>
-	<route path="andy" handler="andycontroller" />
-	<route path="andy/display" handler="controller" action="some" />
-	<route path="andy/{id}" handler="andycontroller" />
-	<route path="andy/nothing" handler="controller2" action="other" />
-	
-	<route path="andy" handler="andycontroller" />
-	<route path="andy/display" handler="andycontroller" action="some" />
-	<route path="andy/{id}" handler="andycontroller" action="value" />
-	<route path="andy/nothing" handler="andycontroller" action="other" />
-	
-	
-	<route path="andy" handler="andycontroller">
-		<route path="display" handler="controller" action="some">overrides parent handler
-			<route path="{id}" handler="andycontroller" />overrides parent handler and clears action
-			<route path="nothing" handler="controller2" action="other" />overrides parent handler and action
-		</route>
-	</route> -->
-	
 	<route path="error" handler="errorcontroller" action="error" />
-	
 	<route path="andy" handler="andycontroller">
 		<route path="display" action="some">
 			<route path="{args}" action="value" />
 			<route path="nothing" action="other" />
 		</route>
 	</route>
-	<route path="mandy" handler="controller">
-		<route path="display" handler="controller2" action="some">
-			<route path="{args}" action="value" />
+	<route path="mandy" handler="controller"><!-- handler is assigned, but no action, so only constructor is invoked -->
+		<route path="{args}" action="mandyMandy" /><!-- no handler change, but now a specific action is called -->
+		<route path="display" handler="controller2" action="some"><!-- initial handler is overriden with new one (action is reset) and new action invoked -->
+			<route path="{args}" action="value" /><!-- new action is invoked with value of the current path as an argument (make sure the path value is different than the path's siblings!) -->
 			<route path="nothing" action="other" />
 		</route>
 	</route>
