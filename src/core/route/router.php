@@ -12,7 +12,6 @@ class Router
 	{
 	    $this->routes = simplexml_load_file(ROUTES_FILE);
 	    $this->dissect();
-	    $this->route();
 	}
 	
 	public function dissect()
@@ -22,9 +21,10 @@ class Router
 	
 	public function route()
 	{
-	    $handlerName = '';
+	    $handler = '';
 	    $action = '';
-	    $xpath = '//routes/';
+	    $args = '';
+	    $xpath = '//routes';
         
         foreach ($this->parts as $part)
         {
@@ -37,38 +37,36 @@ class Router
                 $routes = $this->routes->xpath($xpath);
                 if (empty($routes))
                 {
-                    $handlerName = 'errorcontroller'; // TODO to be configured
-                    $action = 'error'; // TODO to be configured
+                    $handler = 'errorhandler'; // TODO to be configured
+                    $action = ''; // TODO to be configured
                     break;
                 }
+                $args = $part;
             }
             
             foreach ($routes as $route)
             {
                 if (!empty($route['handler']))
                 {
-                    $handlerName = $route['handler'];
+                    $handler = (string) $route['handler'];
                     $action = '';
+                    $args = '';
                 }
                 
                 if (!empty($route['action']))
                 {
-                    $action = $route['action'];
+                    $action = (string) $route['action'];
                 }
             }
-            
         }
         
-        echo "$handlerName/$action";
+        echo "$handler/$action ";
 	    
-	    
-// 	    $handler = $this->container->create($handlerName);
-// 	    if (isset($method))
-// 	    {
-// 	        $handler->$method($args);
-// 	    }
-	    
-// 	    $handler->$method($args);
+	    $handler = $this->container->create($handler);
+	    if (!empty($action))
+	    {
+	        $handler->$action($args);
+	    }
 	}
 }
 

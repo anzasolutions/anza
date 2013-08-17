@@ -21,6 +21,7 @@ define('ROUTES_FILE', INSTALLATION_ROOT_PATH . '/resources/config/route.xml');
 
 $container = new Container();
 $router = $container->create('router');
+$router->route();
 
 $get = $container->single('get');
 $session = $container->single('usersession');
