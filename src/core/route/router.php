@@ -4,7 +4,8 @@ namespace core\route;
 
 /**
  * Invokes class and methods for any url
- * as defined in the route mapping file. 
+ * as defined in the route mapping file.
+ *
  * @author anza
  */
 class Router
@@ -13,20 +14,20 @@ class Router
     private $routes;
     private $parts;
     
-	public function __construct()
-	{
-	    $this->routes = simplexml_load_file(ROUTES_FILE);
-		$this->parts = explode('/', trim($_REQUEST['route'], '/'));
-	}
-	
-	public function route()
-	{
-	    $handler = '';
-	    $action = '';
-	    $args = '';
-	    $xpath = '//routes';
+    public function __construct()
+    {
+        $this->routes = simplexml_load_file(ROUTES_FILE);
+        $this->parts = isset($_REQUEST['route']) ? explode('/', trim($_REQUEST['route'], '/')) : array('default');
+    }
+    
+    public function route()
+    {
+        $handler = '';
+        $action = '';
+        $args = '';
+        $xpath = '//routes';
         
-	    // let's search for route definitions of url path elements
+        // let's search for route definitions of url path elements
         foreach ($this->parts as $part)
         {
             $xpath .= '/route[@path = "' . $part . '"]';
@@ -34,7 +35,7 @@ class Router
             
             if (empty($routes))
             {
-                // when path is not found maybe because it's an argument? 
+                // when path is not found maybe because it's an argument?
                 $xpath = substr_replace($xpath, '{args}', strrpos($xpath, $part), strlen($part));
                 $routes = $this->routes->xpath($xpath);
                 if (empty($routes))
@@ -65,14 +66,14 @@ class Router
             }
         }
         
-        echo "$handler/$action ";
-	    
-	    $handler = $this->container->create($handler);
-	    if (!empty($action))
-	    {
-	        $handler->$action($args);
-	    }
-	}
+        echo "$handler/$action/$args ";
+        
+        $handler = $this->container->create($handler);
+        if (!empty($action))
+        {
+            $handler->$action($args);
+        }
+    }
 }
 
 ?>

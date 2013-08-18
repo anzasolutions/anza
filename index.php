@@ -29,42 +29,15 @@ $router->route();
 $get = $container->single('get');
 $session = $container->single('usersession');
 
-$container->create('post');
-
-$container->bind('post2', function ()
-{
-    return new Post();
-});
-
-$container->create('post2');
-$container->create('get');
-
-$controller = $container->create('controller');
-$ac = $container->create('andycontroller');
-$cbox = $controller->getBox();
-$cbox->foo = 'bar';
-// print_r($controller);
-// print_r($ac);
-$ac->display();
-
-if ($get->login == 'andy')
-{
-    if ($get->remember)
-    {
-        $session->setExtended();
-    }
-    $session->start();
-    header('Location: ' . SESSION_END_REDIRECT_LOCATION);
-}
-
 if (!$session->isStarted())
 {
 
 ?>
 
-<form action="/anza" method="get">
-	<input type="text" name="login" /> <input type="checkbox"
-		name="remember" /> <input type="submit" value="send" />
+<form action="/anza/login" method="post">
+	<input type="text" name="login" />
+	<input type="checkbox" name="remember" />
+	<input type="submit" value="send" />
 </form>
 
 <?php
@@ -75,15 +48,10 @@ else
 
 ?>
 
-<a href="?session=off">destroy</a>
+<a href="/anza/login/destroy">destroy</a>
 
 <?php
 
-}
-
-if ($get->session == 'off')
-{
-    $session->destroyAndRedirect();
 }
 
 if (DEBUG)

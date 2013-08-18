@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
+	<route path="default" handler="andycontroller" /><!-- the only mandatory route path (handler is of course as needed) -->
 	<route path="andy" handler="andycontroller">
 		<route path="display" action="some">
 			<route path="{args}" action="value" />
@@ -15,5 +16,8 @@
 				<route path="call" handler="mandy" />
 			</route>
 		</route>
+	</route>
+	<route path="login" handler="logincontroller" action="login">
+		<route path="destroy" action="destroy" />
 	</route>
 </routes>
