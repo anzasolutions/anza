@@ -12,9 +12,9 @@ class Controller2 extends Controller
     	echo 'Controller2';
     }
     
-    public function other()
+    public function other($value)
     {
-    	echo 'Controller2::other()';
+    	echo "Controller2::other($value)";
     }
     
     public function some()
