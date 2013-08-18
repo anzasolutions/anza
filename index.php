@@ -19,6 +19,9 @@ define('DEBUG', true);
 define('INJECT_FILE', INSTALLATION_ROOT_PATH . '/resources/config/inject.xml');
 define('ROUTES_FILE', INSTALLATION_ROOT_PATH . '/resources/config/route.xml');
 
+define('NOT_FOUND_HANDLER', 'errorhandler');
+define('NOT_FOUND_ACTION', '');
+
 $container = new Container();
 $router = $container->create('router');
 $router->route();

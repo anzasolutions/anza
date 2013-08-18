@@ -2,6 +2,11 @@
 
 namespace core\route;
 
+/**
+ * Invokes class and methods for any url
+ * as defined in the route mapping file. 
+ * @author anza
+ */
 class Router
 {
     private $container;
@@ -11,11 +16,6 @@ class Router
 	public function __construct()
 	{
 	    $this->routes = simplexml_load_file(ROUTES_FILE);
-	    $this->dissect();
-	}
-	
-	public function dissect()
-	{
 		$this->parts = explode('/', trim($_REQUEST['route'], '/'));
 	}
 	
@@ -26,6 +26,7 @@ class Router
 	    $args = '';
 	    $xpath = '//routes';
         
+	    // let's search for route definitions of url path elements
         foreach ($this->parts as $part)
         {
             $xpath .= '/route[@path = "' . $part . '"]';
@@ -33,14 +34,17 @@ class Router
             
             if (empty($routes))
             {
+                // when path is not found maybe because it's an argument? 
                 $xpath = substr_replace($xpath, '{args}', strrpos($xpath, $part), strlen($part));
                 $routes = $this->routes->xpath($xpath);
                 if (empty($routes))
                 {
-                    $handler = 'errorhandler'; // TODO to be configured
-                    $action = ''; // TODO to be configured
+                    // when we know the path is not defined in any way let's go to an error handler
+                    $handler = NOT_FOUND_HANDLER;
+                    $action = NOT_FOUND_ACTION;
                     break;
                 }
+                // ok, the path is an argument, so let's keep its value for later use
                 $args = $part;
             }
             
@@ -48,6 +52,7 @@ class Router
             {
                 if (!empty($route['handler']))
                 {
+                    // when switching handler we must reset action and arguments
                     $handler = (string) $route['handler'];
                     $action = '';
                     $args = '';
