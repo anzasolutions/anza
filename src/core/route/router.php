@@ -14,6 +14,11 @@ class Router
     private $routes;
     private $parts;
     
+    // PERMISSION EXPERIMENTS START
+    private $authorization;
+    private $lopez;
+    // PERMISSION EXPERIMENTS STOP
+    
     public function __construct()
     {
         $this->routes = simplexml_load_file(ROUTES_FILE);
@@ -66,7 +71,20 @@ class Router
             }
         }
         
+        // PERMISSION EXPERIMENTS START
         echo "$handler/$action/$args ";
+        
+        if ($this->lopez->hasPermissions($handler, $action))
+        {
+            $rolesMatch = $this->lopez->sayHi($handler, $action);
+            if (!$rolesMatch)
+            {
+                // when we know the path is not defined in any way let's go to an error handler
+                $handler = NOT_FOUND_HANDLER;
+                $action = NOT_FOUND_ACTION;
+            }
+        }
+        // PERMISSION EXPERIMENTS STOP
         
         $handler = $this->container->create($handler);
         if (!empty($action))

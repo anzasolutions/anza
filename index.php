@@ -18,6 +18,7 @@ define('DEBUG', true);
 
 define('INJECT_FILE', INSTALLATION_ROOT_PATH . '/resources/config/inject.xml');
 define('ROUTES_FILE', INSTALLATION_ROOT_PATH . '/resources/config/route.xml');
+define('PERMITS_FILE', INSTALLATION_ROOT_PATH . '/resources/config/permits.xml');
 
 define('NOT_FOUND_HANDLER', 'errorhandler');
 define('NOT_FOUND_ACTION', '');
@@ -28,6 +29,11 @@ $router->route();
 
 $get = $container->single('get');
 $session = $container->single('usersession');
+
+$lopez = $container->single('lopez');
+$lopez->sayHi('andycontroller', 'display');
+// $lopez->sayHi('andycontroller', 'bambi');
+// $lopez->sayHi('andycontroller', 'popo');
 
 if (!$session->isStarted())
 {
@@ -57,12 +63,11 @@ else
 if (DEBUG)
 {
     echo $session->getId();
-    
     print_r($_SESSION);
-//     print_r($_SERVER);
+    print_r($_SERVER);
     print_r($_COOKIE);
+    echo $container->single('server')->HTTP_USER_AGENT;
 }
 
-echo $container->single('server')->HTTP_USER_AGENT;
 
 ?>
