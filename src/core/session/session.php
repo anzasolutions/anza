@@ -11,7 +11,6 @@ interface Session
     function getId();
     
     function regenerateId();
-    
 }
 
 ?>

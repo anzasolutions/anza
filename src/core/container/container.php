@@ -85,6 +85,8 @@ class Container
      * Injects shared or new instances of dependency classes
      * to the given object based on reflection and injection
      * configuration.
+     * First an existing setter will be used,
+     * otherwise an object will be injected into field.
      *
      * @param string $key a reference to a registered container class
      * @param object $object target of injections
