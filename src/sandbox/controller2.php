@@ -9,22 +9,22 @@ class Controller2 extends Controller
     
     public function __construct()
     {
-    	echo 'Controller2';
+        echo 'Controller2';
     }
     
     public function other($value)
     {
-    	echo "Controller2::other($value)";
+        echo "Controller2::other($value)";
     }
     
     public function some()
     {
-    	echo 'Controller2::some()';
+        echo 'Controller2::some()';
     }
     
     public function value($value)
     {
-    	echo "Controller2::value($value)";
+        echo "Controller2::value($value)";
     }
 }
 

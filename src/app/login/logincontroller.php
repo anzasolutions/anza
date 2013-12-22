@@ -18,7 +18,7 @@ class LoginController
             $this->session->start();
             
             $this->session->login = 'andy';
-            $this->session->roles = array ('author');
+            $this->session->roles = array('author');
             
             header('Location: ' . SESSION_END_REDIRECT_LOCATION);
         }

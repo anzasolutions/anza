@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <classes>
-	<class name="controller"><!-- additional attribute single="true" can be added so an instance will be single -->
-		<field name="box" type="get" supertype="box" single="true" />
-		<field name="box2" type="andycontroller" supertype="controller" single="true" />
-		<field name="box3" type="get" />
-		<!-- <field name="cont2" type="controller2" supertype="controller"/> --><!-- watch out! cyclic dependency -->
-	</class>
-	<class name="andycontroller">
-		<field name="box" type="get" supertype="box" single="true" />
-		<field name="box2" type="post" supertype="box" />
-		<field name="container" type="container" single="true" />
-	</class>
-	<class name="controller2">
-		<field name="box2" type="get" />
-		<field name="cont1" type="controller" />
-		<field name="container" type="container" /><!-- Container is bound to itself, it's single already -->
-	</class>
-	<class name="router">
-		<field name="container" type="container" />
-		<field name="authorization" type="authorization" single="true" />
-		<field name="lopez" type="lopez" single="true" />
-	</class>
-	<class name="logincontroller">
-		<field name="session" type="usersession" single="true" />
-		<field name="post" type="post" single="true" />
-		<field name="container" type="container" /><!-- Container is bound to itself, it's single already -->
-	</class>
-	<class name="lopez">
-		<field name="session" type="usersession" single="true" />
-	</class>
+    <class name="controller"><!-- additional attribute single="true" can be added so an instance will be single -->
+        <field name="box" type="get" supertype="box" single="true" />
+        <field name="box2" type="andycontroller" supertype="controller" single="true" />
+        <field name="box3" type="get" />
+        <!-- <field name="cont2" type="controller2" supertype="controller"/> --><!-- watch out! cyclic dependency -->
+    </class>
+    <class name="andycontroller">
+        <field name="box" type="get" supertype="box" single="true" />
+        <field name="box2" type="post" supertype="box" />
+        <field name="container" type="container" single="true" />
+    </class>
+    <class name="controller2">
+        <field name="box2" type="get" />
+        <field name="cont1" type="controller" />
+        <field name="container" type="container" /><!-- Container is bound to itself, it's single already -->
+    </class>
+    <class name="router">
+        <field name="container" type="container" />
+        <field name="authorization" type="authorization" single="true" />
+        <field name="lopez" type="lopez" single="true" />
+    </class>
+    <class name="logincontroller">
+        <field name="session" type="usersession" single="true" />
+        <field name="post" type="post" single="true" />
+        <field name="container" type="container" /><!-- Container is bound to itself, it's single already -->
+    </class>
+    <class name="lopez">
+        <field name="session" type="usersession" single="true" />
+    </class>
 </classes>

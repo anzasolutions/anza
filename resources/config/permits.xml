@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <permits>
-	<class name="andycontroller" roles="admin,user,author">
-		<method name="display" roles="user, author " />
-		<method name="bambi" roles="director, editor" any="false" />
-		<method name="popo" any="true" />
-	</class>
+    <class name="andycontroller" roles="admin,user,author">
+        <method name="display" roles="user, author " />
+        <method name="bambi" roles="director, editor" any="false" />
+        <method name="popo" any="true" />
+    </class>
 </permits>

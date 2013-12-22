@@ -13,12 +13,12 @@ class Controller
     
     public function setBox3(Box $box3)
     {
-    	$this->box3 = $box3;
+        $this->box3 = $box3;
     }
     
     public function getBox()
     {
-    	return $this->box;
+        return $this->box;
     }
 }
 

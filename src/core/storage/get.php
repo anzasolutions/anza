@@ -4,10 +4,10 @@ namespace core\storage;
 
 class Get extends Box
 {
-	public function __construct()
-	{
-	    parent::__construct($_GET);
-	}
+    public function __construct()
+    {
+        parent::__construct($_GET);
+    }
 }
 
 ?>

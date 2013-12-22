@@ -4,10 +4,10 @@ namespace sandbox;
 
 class Mandy
 {
-	public function __construct()
-	{
-		echo 'Mandy';
-	}
+    public function __construct()
+    {
+        echo 'Mandy';
+    }
 }
 
 ?>

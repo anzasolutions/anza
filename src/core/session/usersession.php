@@ -4,18 +4,18 @@ namespace core\session;
 
 /**
  * Handles user session and keeps track of session data.
- * 
+ *
  * Expires when:
  * - not extended session cookie is set:
  *   + after a normal expiration limit
  *   + on browser shutdown
  * - extended session cookie is set
- *   + after an extended expiration limit 
+ *   + after an extended expiration limit
  * - explicit session destruction by user
- * 
+ *
  * Is protected from hijack attempts by regeneration of session id
  * and client recognition using a fingerprint id.
- * 
+ *
  * @author anza
  *
  */
@@ -39,7 +39,7 @@ class UserSession implements Session
         $this->setFingerprint();
         
         // quite apparent, but might be confusing as this is not
-        // exactly starting session, but only a marker that 
+        // exactly starting session, but only a marker that
         // a user is logged in and therefore in fact an experiencing
         // session activities are allowed
         if ($this->isStarted())
@@ -54,7 +54,7 @@ class UserSession implements Session
     
     private function setFingerprint()
     {
-        if (! isset($_SESSION['fingerprint']))
+        if (!isset($_SESSION['fingerprint']))
         {
             $_SESSION['fingerprint'] = $this->getFingerprint();
         }
@@ -92,7 +92,7 @@ class UserSession implements Session
      */
     private function checkStatus()
     {
-        if ($this->isExpired() || ! $this->isFingerprintValid())
+        if ($this->isExpired() || !$this->isFingerprintValid())
         {
             $this->destroyAndRedirect();
         }
@@ -101,7 +101,7 @@ class UserSession implements Session
     
     private function isExpired()
     {
-        if (! $this->isExtended())
+        if (!$this->isExtended())
         {
             if (isset($_SESSION['last_activity']))
             {
@@ -174,7 +174,7 @@ class UserSession implements Session
         {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-            setcookie('extended', null, - 1);
+            setcookie('extended', null, -1);
         }
         
         // Finally, destroy the session.
@@ -218,7 +218,7 @@ class UserSession implements Session
         // session id regeration for security reasons
         $this->regenerateId();
         
-        // new session id is assigned to the existing session cookie 
+        // new session id is assigned to the existing session cookie
         $_COOKIE[session_name()] = session_id();
         
         // session expiration timeout is updated
