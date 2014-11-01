@@ -1,0 +1,6 @@
+- user has roles (admin, author)
+- class/method has access levels
+- user roles must be checked against roles of class/method
+- if any user and class/method role matches, then class/method is invoked
+- roles defined at class level applies to all its methods
+- role defined at method level overrides those defined at class level

@@ -13,6 +13,8 @@ class Router
     private $container;
     private $routes;
     private $parts;
+    private $authorization;
+    private $lopez;
     
     public function __construct()
     {
@@ -67,6 +69,17 @@ class Router
         }
         
         echo "$handler/$action/$args ";
+        
+        if ($this->lopez->hasPermissions($handler, $action))
+        {
+            $rolesMatch = $this->lopez->sayHi($handler, $action);
+            if (!$rolesMatch)
+            {
+                // when we know the path is not defined in any way let's go to an error handler
+                $handler = NOT_FOUND_HANDLER;
+                $action = NOT_FOUND_ACTION;
+            }
+        }
         
         $handler = $this->container->create($handler);
         if (!empty($action))

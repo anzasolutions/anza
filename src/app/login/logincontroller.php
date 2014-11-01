@@ -16,13 +16,18 @@ class LoginController
                 $this->session->setExtended();
             }
             $this->session->start();
-            header('Location: ' . SESSION_END_REDIRECT_LOCATION);
+            
+            $this->session->login = 'andy';
+            $this->session->roles = array (
+                    'author' );
+            
+            header ( 'Location: ' . SESSION_END_REDIRECT_LOCATION );
         }
     }
     
     public function destroy()
     {
-        $this->session->destroyAndRedirect();
+        $this->session->destroyAndRedirect ();
     }
 }
 

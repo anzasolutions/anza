@@ -14,7 +14,7 @@ class Container
     private $objects;
     private $singles;
     private $injections;
-    
+
     public function __construct()
     {
         $this->initialize();
@@ -23,7 +23,7 @@ class Container
             return $this;
         });
     }
-    
+
     /**
      * Recursively walks through a project structure.
      * Based on the paths and class files found creates
@@ -48,7 +48,7 @@ class Container
         }
         $this->injections = simplexml_load_file(INJECT_FILE);
     }
-    
+
     /**
      * Creates new instance of a registered class.
      *
@@ -65,7 +65,7 @@ class Container
         }
         throw new CreateException("Cannot create instance of a class by the given key: $key");
     }
-    
+
     /**
      * Provides a single shared instance of a registered class.
      *
@@ -80,11 +80,13 @@ class Container
         }
         return $this->singles[$key] = $this->create($key);
     }
-    
+
     /**
      * Injects shared or new instances of dependency classes
      * to the given object based on reflection and injection
      * configuration.
+     * First an existing setter will be used,
+     * otherwise an object will be injected into field.
      *
      * @param string $key a reference to a registered container class
      * @param object $object target of injections
@@ -124,7 +126,7 @@ class Container
         }
         return $object;
     }
-    
+
     /**
      * Explicitly binds class to a key in the Container
      * for later creation as a normal instance or a single.
