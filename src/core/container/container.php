@@ -18,6 +18,7 @@ class Container
     public function __construct()
     {
         $this->initialize();
+
         $this->bind('container', function ()
         {
             return $this;
@@ -104,7 +105,7 @@ class Container
             {
                 $method = (string) $field['single'] == 'true' ? 'single' : 'create';
                 $dependency = $this->{$method}((string) $field['type']);
-                
+
                 if ($reflection->hasMethod($setter = 'set' . $property->name))
                 {
                     $object->$setter($dependency);

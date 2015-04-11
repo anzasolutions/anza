@@ -6,6 +6,7 @@ class AndyController extends Controller
 {
     private $container;
     private $session;
+    private $config;
     
     public function getContainerValue($key)
     {
